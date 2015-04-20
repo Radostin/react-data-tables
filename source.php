@@ -6,14 +6,21 @@ echo json_encode([
 
     'columns' => [
         [
-            'title' => 'Name'
+            'title' => 'Name',
+            'key'   => 'name'
         ],
         [
-            'title' => 'City'
+            'title' => 'City',
+            'key'   => 'city'
         ],
         [
-            'title' => 'Age'
+            'title' => 'Age',
+            'key'   => 'age'
         ],
+        [
+            'title' => 'Actions',
+            'key'   => 'action.activities'
+        ]
     ],
 
     'rows'    => [
@@ -26,6 +33,11 @@ echo json_encode([
             'name' => 'Joe Doe',
             'city' => 'Chicago',
             'age'  => 25
+        ],
+        [
+            'name' => 'John Doe',
+            'city' => 'Paris',
+            'age'  => 27
         ]
     ]
 ]);

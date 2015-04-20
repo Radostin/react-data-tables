@@ -30,9 +30,8 @@ var Table = React.createClass({
             <div className="col-md-12">
                 <h1 className="text-center">Table</h1>
 
-                <table>
+                <table className="table">
                     <TableHead columns={this.state.columns} />
-
                     <TableBody rows={this.state.rows} />
                 </table>
 

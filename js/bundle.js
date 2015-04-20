@@ -63,7 +63,7 @@ var Table = React.createClass({
             ),
             React.createElement(
                 'table',
-                null,
+                { className: 'table' },
                 React.createElement(_TableHead2['default'], { columns: this.state.columns }),
                 React.createElement(_TableBody2['default'], { rows: this.state.rows })
             )
@@ -76,28 +76,44 @@ exports['default'] = Table;
 module.exports = exports['default'];
 
 },{"./TableBody.js":3,"./TableHead.js":4}],3:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+
+Object.defineProperty(exports, '__esModule', {
     value: true
 });
+
+var _TableRowColumn = require('./TableRowColumn.js');
+
+var _TableRowColumn2 = _interopRequireWildcard(_TableRowColumn);
+
 var TableBody = React.createClass({
-    displayName: "TableBody",
+    displayName: 'TableBody',
 
     render: function render() {
+
+        var allRows = this.props.rows;
+
+        var rows = [];
+
+        for (var rowIndex in allRows) {
+            rows.push(React.createElement(_TableRowColumn2['default'], { row: allRows[rowIndex] }));
+        }
+
         return React.createElement(
-            "tbody",
+            'tbody',
             null,
-            React.createElement(TableRow, { rows: this.props.rows })
+            rows
         );
     }
 
 });
 
-exports["default"] = TableBody;
-module.exports = exports["default"];
+exports['default'] = TableBody;
+module.exports = exports['default'];
 
-},{}],4:[function(require,module,exports){
+},{"./TableRowColumn.js":5}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -138,6 +154,40 @@ var TableHead = React.createClass({
 });
 
 exports["default"] = TableHead;
+module.exports = exports["default"];
+
+},{}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var TableRowColumn = React.createClass({
+    displayName: "TableRowColumn",
+
+    render: function render() {
+        var allColumns = this.props.row;
+
+        var columns = [];
+
+        for (var columnIndex in allColumns) {
+            columns.push(React.createElement(
+                "td",
+                null,
+                allColumns[columnIndex]
+            ));
+        }
+
+        return React.createElement(
+            "tr",
+            null,
+            columns
+        );
+    }
+
+});
+
+exports["default"] = TableRowColumn;
 module.exports = exports["default"];
 
 },{}]},{},[1]);

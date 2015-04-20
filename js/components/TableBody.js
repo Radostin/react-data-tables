@@ -9,7 +9,9 @@ var TableBody = React.createClass({
         var rows = [];
 
         for (var rowIndex in allRows) {
-            rows.push(<TableRowColumn row={allRows[rowIndex]} />);
+            rows.push(<TableRowColumn
+                customCells={this.props.customCells}
+                row={allRows[rowIndex]} />);
         }
 
         return(

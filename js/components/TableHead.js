@@ -1,7 +1,14 @@
 var TableHead = React.createClass({
 
     displayColumn: function(column){
-        return <th>{column.title}</th>
+
+        var className = '';
+
+        if(typeof column.class !== 'undefined'){
+            className = column.class;
+        }
+
+        return <th className={className}>{column.title}</th>
     },
 
     render: function(){

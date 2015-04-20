@@ -32,9 +32,10 @@ var Table = React.createClass({
 
                 <table className="table">
                     <TableHead columns={this.state.columns} />
-                    <TableBody rows={this.state.rows} />
+                    <TableBody
+                        customCells={this.props.customCells}
+                        rows={this.state.rows} />
                 </table>
-
             </div>
         );
     }

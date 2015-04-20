@@ -7,9 +7,22 @@ var _Table = require('./components/Table.js');
 
 var _Table2 = _interopRequireWildcard(_Table);
 
-React.render(React.createElement(_Table2['default'], { remoteLocation: '/source.php' }), document.getElementById('table'));
+var _TableHead = require('./components/TableHead.js');
 
-},{"./components/Table.js":2}],2:[function(require,module,exports){
+var _TableHead2 = _interopRequireWildcard(_TableHead);
+
+var customCells = {
+    action: function action(row) {
+        return '<td><h1>It Works</h1></td>';
+    }
+};
+
+React.render(React.createElement(_Table2['default'], {
+    remoteLocation: '/source.php',
+    customCells: customCells
+}), document.getElementById('table'));
+
+},{"./components/Table.js":2,"./components/TableHead.js":4}],2:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -65,7 +78,9 @@ var Table = React.createClass({
                 'table',
                 { className: 'table' },
                 React.createElement(_TableHead2['default'], { columns: this.state.columns }),
-                React.createElement(_TableBody2['default'], { rows: this.state.rows })
+                React.createElement(_TableBody2['default'], {
+                    customCells: this.props.customCells,
+                    rows: this.state.rows })
             )
         );
     }
@@ -98,7 +113,9 @@ var TableBody = React.createClass({
         var rows = [];
 
         for (var rowIndex in allRows) {
-            rows.push(React.createElement(_TableRowColumn2['default'], { row: allRows[rowIndex] }));
+            rows.push(React.createElement(_TableRowColumn2['default'], {
+                customCells: this.props.customCells,
+                row: allRows[rowIndex] }));
         }
 
         return React.createElement(
@@ -114,18 +131,25 @@ exports['default'] = TableBody;
 module.exports = exports['default'];
 
 },{"./TableRowColumn.js":5}],4:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
     value: true
 });
 var TableHead = React.createClass({
-    displayName: "TableHead",
+    displayName: 'TableHead',
 
     displayColumn: function displayColumn(column) {
+
+        var className = '';
+
+        if (typeof column['class'] !== 'undefined') {
+            className = column['class'];
+        }
+
         return React.createElement(
-            "th",
-            null,
+            'th',
+            { className: className },
             column.title
         );
     },
@@ -141,10 +165,10 @@ var TableHead = React.createClass({
         }
 
         return React.createElement(
-            "thead",
+            'thead',
             null,
             React.createElement(
-                "tr",
+                'tr',
                 null,
                 columns
             )
@@ -153,33 +177,46 @@ var TableHead = React.createClass({
 
 });
 
-exports["default"] = TableHead;
-module.exports = exports["default"];
+exports['default'] = TableHead;
+module.exports = exports['default'];
 
 },{}],5:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
     value: true
 });
 var TableRowColumn = React.createClass({
-    displayName: "TableRowColumn",
+    displayName: 'TableRowColumn',
 
     render: function render() {
+
+        var customCells = this.props.customCells;
+
         var allColumns = this.props.row;
 
         var columns = [];
 
+        console.log(customCells);
+
         for (var columnIndex in allColumns) {
-            columns.push(React.createElement(
-                "td",
-                null,
-                allColumns[columnIndex]
-            ));
+            //if there's a custom cell define, we will trigger it.
+            var column = allColumns[columnIndex];
+            if (typeof customCells[columnIndex] !== 'undefined') {
+                columns.push(customCells[columnIndex](column));
+            } else {
+                columns.push(React.createElement(
+                    'td',
+                    null,
+                    column
+                ));
+            }
         }
 
+        console.log(columns);
+
         return React.createElement(
-            "tr",
+            'tr',
             null,
             columns
         );
@@ -187,7 +224,7 @@ var TableRowColumn = React.createClass({
 
 });
 
-exports["default"] = TableRowColumn;
-module.exports = exports["default"];
+exports['default'] = TableRowColumn;
+module.exports = exports['default'];
 
 },{}]},{},[1]);

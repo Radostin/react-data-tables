@@ -19,15 +19,16 @@ echo json_encode([
         ],
         [
             'title' => 'Actions',
-            'key'   => 'action.activities'
+            'key'   => 'actions',
         ]
     ],
 
     'rows'    => [
         [
-            'name' => 'John Smith',
-            'city' => 'New York',
-            'age'  => 21
+            'name'  => 'John Smith',
+            'city'  => 'New York',
+            'age'   => 21,
+            'action' => 'go'
         ],
         [
             'name' => 'Joe Doe',

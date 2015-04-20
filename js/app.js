@@ -1,3 +1,17 @@
 import Table from './components/Table.js';
+import TableHead from './components/TableHead.js';
 
-React.render(<Table remoteLocation="/source.php" />, document.getElementById('table'));
+
+var customCells = {
+    action: function (row) {
+        ;
+    }
+};
+
+React.render(<Table
+        remoteLocation="/source.php"
+        customCells={customCells}
+    />,
+
+    document.getElementById('table'));
+

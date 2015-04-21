@@ -58,7 +58,7 @@ npm install
 ```
 
 2-Step) 
-#### Boot php server to generate json data from source.php
+#### Boot up a PHP server to generate JSON data from source.php
 ```
 php -S localhost:8888
 ```

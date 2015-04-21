@@ -9,19 +9,43 @@ var Table = React.createClass({
 
         return {
             rows: [],
-            columns: []
+            columns: [],
+            columnsOrder: []
         };
     },
 
     getRemote: function () {
         var url = this.props.remoteLocation;
+        var type = this.props.remoteMethod;
 
-        $.get(url, (result) => {
-            var columns = result.columns;
-            var rows = result.rows;
-            this.setState({rows, columns});
+        $.ajax({
+            type: type,
+            url: url,
+            data: $('#ordercheck').serialize(),
+            dataType: 'json',
+            success: (result) =>
+            {
+                var columns = result.columns;
+                var rows = result.rows;
+
+                this.setState({rows, columns});
+            }
+
         });
 
+    },
+
+    getColumnsOrder: function () {
+
+        var columns = this.state.columns;
+
+        var columnsOrder = [];
+
+        for (var columnKey in columns) {
+            columnsOrder.push((columns[columnKey]).key);
+        }
+
+        return columnsOrder;
     },
 
     render: function () {
@@ -34,6 +58,8 @@ var Table = React.createClass({
                     <TableHead columns={this.state.columns} />
                     <TableBody
                         customCells={this.props.customCells}
+                        columnsOrder={this.getColumnsOrder()}
+                        columns={this.state.columns}
                         rows={this.state.rows} />
                 </table>
             </div>

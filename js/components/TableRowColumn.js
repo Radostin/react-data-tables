@@ -1,31 +1,45 @@
 var TableRowColumn = React.createClass({
 
-    render: function () {
+    getCells: function(){
+
+        var cellsToBeDisplayed = [];
+
+        var cells = this.props.row;
 
         var customCells = this.props.customCells;
 
-        var allColumns = this.props.row;
+        var columns = this.props.columnsOrder;
 
-        var columns = [];
+        for (var columnIndex in columns) {
 
-        console.log(customCells);
+            let cellIndex = columns[columnIndex];
 
-        for (var columnIndex in allColumns) {
-            //if there's a custom cell define, we will trigger it.
-            let column = allColumns[columnIndex];
-            if (typeof customCells[columnIndex] !== 'undefined') {
-                columns.push(customCells[columnIndex](column));
-            } else {
-                columns.push(<td>{column}</td>);
+            let cell = cells[cellIndex];
+
+            if (this.isCustomCell(customCells, cellIndex)) {
+
+                let customComponent = customCells[cellIndex](cells);
+                cellsToBeDisplayed.push(<td>{customComponent}</td>);
+
+                continue;
             }
-            
+
+            cellsToBeDisplayed.push(<td>{cell}</td>);
+
         }
 
-        console.log(columns);
+        return cellsToBeDisplayed;
+    },
+
+    render: function () {
 
         return (
-            <tr>{columns}</tr>
+            <tr>{this.getCells()}</tr>
         );
+    },
+
+    isCustomCell: function (customCells, cellIndex) {
+        return typeof customCells[cellIndex] !== 'undefined';
     }
 
 });

@@ -11,6 +11,8 @@ var TableBody = React.createClass({
         for (var rowIndex in allRows) {
             rows.push(<TableRowColumn
                 customCells={this.props.customCells}
+                columnsOrder={this.props.columnsOrder}
+                columns={this.props.columns}
                 row={allRows[rowIndex]} />);
         }
 

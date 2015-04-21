@@ -11,18 +11,61 @@ var _TableHead = require('./components/TableHead.js');
 
 var _TableHead2 = _interopRequireWildcard(_TableHead);
 
+var _CustomCell = require('./components/CustomCell.js');
+
+var _CustomCell2 = _interopRequireWildcard(_CustomCell);
+
 var customCells = {
     action: function action(row) {
-        return '<td><h1>It Works</h1></td>';
+        return React.createElement(_CustomCell2['default'], { row: row });
+    },
+    link: function link(row) {
+        return React.createElement(
+            'a',
+            { href: '/users/' + row.country },
+            row.country
+        );
     }
 };
 
 React.render(React.createElement(_Table2['default'], {
     remoteLocation: '/source.php',
+    remoteMethod: 'GET',
     customCells: customCells
 }), document.getElementById('table'));
 
-},{"./components/Table.js":2,"./components/TableHead.js":4}],2:[function(require,module,exports){
+},{"./components/CustomCell.js":2,"./components/Table.js":3,"./components/TableHead.js":5}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+var CustomCell = React.createClass({
+    displayName: 'CustomCell',
+
+    render: function render() {
+
+        var row = this.props.row;
+
+        return React.createElement(
+            'div',
+            null,
+            'Yey it works ',
+            React.createElement(
+                'a',
+                { className: 'btn btn-primary',
+                    href: '/user/' + row.name + '/deactivate' },
+                'Deactivate'
+            )
+        );
+    }
+
+});
+
+exports['default'] = CustomCell;
+module.exports = exports['default'];
+
+},{}],3:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -48,7 +91,8 @@ var Table = React.createClass({
 
         return {
             rows: [],
-            columns: []
+            columns: [],
+            columnsOrder: []
         };
     },
 
@@ -56,12 +100,34 @@ var Table = React.createClass({
         var _this = this;
 
         var url = this.props.remoteLocation;
+        var type = this.props.remoteMethod;
 
-        $.get(url, function (result) {
-            var columns = result.columns;
-            var rows = result.rows;
-            _this.setState({ rows: rows, columns: columns });
+        $.ajax({
+            type: type,
+            url: url,
+            data: $('#ordercheck').serialize(),
+            dataType: 'json',
+            success: function success(result) {
+                var columns = result.columns;
+                var rows = result.rows;
+
+                _this.setState({ rows: rows, columns: columns });
+            }
+
         });
+    },
+
+    getColumnsOrder: function getColumnsOrder() {
+
+        var columns = this.state.columns;
+
+        var columnsOrder = [];
+
+        for (var columnKey in columns) {
+            columnsOrder.push(columns[columnKey].key);
+        }
+
+        return columnsOrder;
     },
 
     render: function render() {
@@ -80,6 +146,8 @@ var Table = React.createClass({
                 React.createElement(_TableHead2['default'], { columns: this.state.columns }),
                 React.createElement(_TableBody2['default'], {
                     customCells: this.props.customCells,
+                    columnsOrder: this.getColumnsOrder(),
+                    columns: this.state.columns,
                     rows: this.state.rows })
             )
         );
@@ -90,7 +158,7 @@ var Table = React.createClass({
 exports['default'] = Table;
 module.exports = exports['default'];
 
-},{"./TableBody.js":3,"./TableHead.js":4}],3:[function(require,module,exports){
+},{"./TableBody.js":4,"./TableHead.js":5}],4:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -115,6 +183,8 @@ var TableBody = React.createClass({
         for (var rowIndex in allRows) {
             rows.push(React.createElement(_TableRowColumn2['default'], {
                 customCells: this.props.customCells,
+                columnsOrder: this.props.columnsOrder,
+                columns: this.props.columns,
                 row: allRows[rowIndex] }));
         }
 
@@ -130,7 +200,7 @@ var TableBody = React.createClass({
 exports['default'] = TableBody;
 module.exports = exports['default'];
 
-},{"./TableRowColumn.js":5}],4:[function(require,module,exports){
+},{"./TableRowColumn.js":6}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -139,14 +209,18 @@ Object.defineProperty(exports, '__esModule', {
 var TableHead = React.createClass({
     displayName: 'TableHead',
 
-    displayColumn: function displayColumn(column) {
-
+    getColumnClass: function getColumnClass(column) {
         var className = '';
 
         if (typeof column['class'] !== 'undefined') {
             className = column['class'];
         }
+        return className;
+    },
 
+    displayColumn: function displayColumn(column) {
+
+        var className = this.getColumnClass(column);
         return React.createElement(
             'th',
             { className: className },
@@ -180,7 +254,7 @@ var TableHead = React.createClass({
 exports['default'] = TableHead;
 module.exports = exports['default'];
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -189,37 +263,55 @@ Object.defineProperty(exports, '__esModule', {
 var TableRowColumn = React.createClass({
     displayName: 'TableRowColumn',
 
-    render: function render() {
+    getCells: function getCells() {
+
+        var cellsToBeDisplayed = [];
+
+        var cells = this.props.row;
 
         var customCells = this.props.customCells;
 
-        var allColumns = this.props.row;
+        var columns = this.props.columnsOrder;
 
-        var columns = [];
+        for (var columnIndex in columns) {
 
-        console.log(customCells);
+            var cellIndex = columns[columnIndex];
 
-        for (var columnIndex in allColumns) {
-            //if there's a custom cell define, we will trigger it.
-            var column = allColumns[columnIndex];
-            if (typeof customCells[columnIndex] !== 'undefined') {
-                columns.push(customCells[columnIndex](column));
-            } else {
-                columns.push(React.createElement(
+            var cell = cells[cellIndex];
+
+            if (this.isCustomCell(customCells, cellIndex)) {
+
+                var customComponent = customCells[cellIndex](cells);
+                cellsToBeDisplayed.push(React.createElement(
                     'td',
                     null,
-                    column
+                    customComponent
                 ));
+
+                continue;
             }
+
+            cellsToBeDisplayed.push(React.createElement(
+                'td',
+                null,
+                cell
+            ));
         }
 
-        console.log(columns);
+        return cellsToBeDisplayed;
+    },
+
+    render: function render() {
 
         return React.createElement(
             'tr',
             null,
-            columns
+            this.getCells()
         );
+    },
+
+    isCustomCell: function isCustomCell(customCells, cellIndex) {
+        return typeof customCells[cellIndex] !== 'undefined';
     }
 
 });

@@ -1,13 +1,17 @@
 var TableHead = React.createClass({
 
-    displayColumn: function(column){
-
+    getColumnClass: function (column) {
         var className = '';
 
-        if(typeof column.class !== 'undefined'){
+        if (typeof column.class !== 'undefined') {
             className = column.class;
         }
+        return className;
+    },
 
+    displayColumn: function(column){
+
+        var className = this.getColumnClass(column);
         return <th className={className}>{column.title}</th>
     },
 

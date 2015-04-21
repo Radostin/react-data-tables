@@ -3,8 +3,8 @@
 The main objective is to provide a simple, intuitive, and powerful data tables module.
 RDT is alternative to jQuery's dataTables module.
 
-### The project is still young and unstable, so, I don't recommend to be pushed in production!
-### Contributions are welcomed!
+##### The project is still young and unstable, so, I don't recommend to be pushed in production!
+###### Contributions are welcomed!
 
 ## Code Example
 
@@ -51,20 +51,20 @@ React.render(<Table
 As of now, you can easily clone the package on your machine and run:
 
 1-Step) 
-### Install Node.JS dependencies
+#### Install Node.JS dependencies
 ```
 cd project-folder/
 npm install
 ```
 
 2-Step) 
-### Boot php server to generate json data from source.php
+#### Boot php server to generate json data from source.php
 ```
 php -S localhost:8888
 ```
 
 3-Step)
-### Open up localhost:8888 in your browser
+#### Open up localhost:8888 in your browser
 
 ## TODOS:
 There project is still a baby and there's a lot to be done.

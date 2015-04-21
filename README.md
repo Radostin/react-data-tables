@@ -8,10 +8,10 @@ RDT is alternative to jQuery's dataTables module.
 
 ## Code Example
 
-As I said, my main objective is to build extremely readable API! 
+As already mention, the main purpose is to build an expressive API! 
 
 The following snippet will create a table based on the JSON response from source.php
-```
+```jsx
 React.render(<Table remoteLocation="/source.php" remoteMethod="GET" />,
               document.getElementById('table'));
 ```
@@ -22,14 +22,14 @@ have buttons, links, events, and etc. Hence, defining custom cells is important.
 
 In the current version, we are able to do things like:
 
-```
+```jsx
 var customCells = {
     actions: function (user) {
         return ( 
           <div>
             <a className="btn btn-primary"
             onClick={this.deactivateUser(user.id)}>Deactivate</a>
-          <divr> 
+          </div> 
         );
     },
     avatar: function (user) {
@@ -52,14 +52,14 @@ As of now, you can easily clone the package on your machine and run:
 
 1-Step) 
 #### Install Node.JS dependencies
-```
+```bash
 cd project-folder/
 npm install
 ```
 
 2-Step) 
 #### Boot up a PHP server to generate JSON data from source.php
-```
+```bash
 php -S localhost:8888
 ```
 

@@ -1,5 +1,4 @@
 import Table from './components/Table.js';
-import TableHead from './components/TableHead.js';
 import CustomCell from './components/CustomCell.js';
 
 

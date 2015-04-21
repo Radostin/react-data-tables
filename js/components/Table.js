@@ -1,5 +1,6 @@
 import TableHead from './TableHead.js';
 import TableBody from './TableBody.js';
+import TableSearchForm from './TableSearchForm.js';
 
 var Table = React.createClass({
 
@@ -14,14 +15,14 @@ var Table = React.createClass({
         };
     },
 
-    getRemote: function () {
+    getRemote: function (query = {}) {
         var url = this.props.remoteLocation;
         var type = this.props.remoteMethod;
 
         $.ajax({
             type: type,
             url: url,
-            data: $('#ordercheck').serialize(),
+            data: query,
             dataType: 'json',
             success: (result) =>
             {
@@ -38,7 +39,6 @@ var Table = React.createClass({
     getColumnsOrder: function () {
 
         var columns = this.state.columns;
-
         var columnsOrder = [];
 
         for (var columnKey in columns) {
@@ -48,11 +48,17 @@ var Table = React.createClass({
         return columnsOrder;
     },
 
+    onTableSearch: function(keyword){
+        this.getRemote({keyword: keyword});
+    },
+
     render: function () {
 
         return (
             <div className="col-md-12">
                 <h1 className="text-center">Table</h1>
+
+                <TableSearchForm onTableSearch={this.onTableSearch} />
 
                 <table className="table">
                     <TableHead columns={this.state.columns} />

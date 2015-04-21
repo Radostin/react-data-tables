@@ -7,10 +7,6 @@ var _Table = require('./components/Table.js');
 
 var _Table2 = _interopRequireWildcard(_Table);
 
-var _TableHead = require('./components/TableHead.js');
-
-var _TableHead2 = _interopRequireWildcard(_TableHead);
-
 var _CustomCell = require('./components/CustomCell.js');
 
 var _CustomCell2 = _interopRequireWildcard(_CustomCell);
@@ -34,7 +30,7 @@ React.render(React.createElement(_Table2['default'], {
     customCells: customCells
 }), document.getElementById('table'));
 
-},{"./components/CustomCell.js":2,"./components/Table.js":3,"./components/TableHead.js":5}],2:[function(require,module,exports){
+},{"./components/CustomCell.js":2,"./components/Table.js":3}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -82,6 +78,10 @@ var _TableBody = require('./TableBody.js');
 
 var _TableBody2 = _interopRequireWildcard(_TableBody);
 
+var _TableSearchForm = require('./TableSearchForm.js');
+
+var _TableSearchForm2 = _interopRequireWildcard(_TableSearchForm);
+
 var Table = React.createClass({
     displayName: 'Table',
 
@@ -99,15 +99,18 @@ var Table = React.createClass({
     getRemote: function getRemote() {
         var _this = this;
 
+        var query = arguments[0] === undefined ? {} : arguments[0];
+
         var url = this.props.remoteLocation;
         var type = this.props.remoteMethod;
 
         $.ajax({
             type: type,
             url: url,
-            data: $('#ordercheck').serialize(),
+            data: query,
             dataType: 'json',
             success: function success(result) {
+                console.log(result);
                 var columns = result.columns;
                 var rows = result.rows;
 
@@ -120,7 +123,6 @@ var Table = React.createClass({
     getColumnsOrder: function getColumnsOrder() {
 
         var columns = this.state.columns;
-
         var columnsOrder = [];
 
         for (var columnKey in columns) {
@@ -128,6 +130,10 @@ var Table = React.createClass({
         }
 
         return columnsOrder;
+    },
+
+    onTableSearch: function onTableSearch(keyword) {
+        this.getRemote({ keyword: keyword });
     },
 
     render: function render() {
@@ -140,6 +146,7 @@ var Table = React.createClass({
                 { className: 'text-center' },
                 'Table'
             ),
+            React.createElement(_TableSearchForm2['default'], { onTableSearch: this.onTableSearch }),
             React.createElement(
                 'table',
                 { className: 'table' },
@@ -158,7 +165,7 @@ var Table = React.createClass({
 exports['default'] = Table;
 module.exports = exports['default'];
 
-},{"./TableBody.js":4,"./TableHead.js":5}],4:[function(require,module,exports){
+},{"./TableBody.js":4,"./TableHead.js":5,"./TableSearchForm.js":7}],4:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -318,5 +325,42 @@ var TableRowColumn = React.createClass({
 
 exports['default'] = TableRowColumn;
 module.exports = exports['default'];
+
+},{}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var TableSearchForm = React.createClass({
+    displayName: "TableSearchForm",
+
+    getInitialState: function getInitialState() {
+        return {
+            keyword: ""
+        };
+    },
+
+    onChangeKeyword: function onChangeKeyword(e) {
+
+        var keyword = e.target.value;
+
+        this.props.onTableSearch(keyword);
+
+        this.setState({ keyword: keyword });
+    },
+
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: "col-md-3 col-md-offset-9" },
+            React.createElement("input", { value: this.state.keyword, onChange: this.onChangeKeyword })
+        );
+    }
+
+});
+
+exports["default"] = TableSearchForm;
+module.exports = exports["default"];
 
 },{}]},{},[1]);

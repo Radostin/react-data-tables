@@ -4,7 +4,7 @@ var TableRowColumn = React.createClass({
 
         var cellsToBeDisplayed = [];
 
-        var cells = this.props.row;
+        var cells = this.props.data;
 
         var customCells = this.props.customCells;
 

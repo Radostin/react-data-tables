@@ -2,32 +2,6 @@
 
 header('Content-Type: application/json');
 
-if ($_GET['keyword'] == 'Mike')
-{
-    echo json_encode([
-
-        'columns' => [
-            [
-                'title'      => 'Name',
-                'key'        => 'name',
-                'isSortable' => true
-            ],
-        ],
-
-        'rows'    => [
-            [
-                'id'      => 1,
-                'name'    => 'Mike Smith',
-                'city'    => 'Malibu',
-                'country' => 'US',
-                'age'     => 23,
-                'action'  => true
-            ]
-        ]
-    ]);
-    exit;
-}
-
 echo json_encode([
 
     'columns' => [
@@ -77,6 +51,5 @@ echo json_encode([
             'age'     => 27,
             'action'  => true
         ]
-    ],
-    'get' => $_GET
+    ]
 ]);

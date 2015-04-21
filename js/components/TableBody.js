@@ -4,16 +4,16 @@ var TableBody = React.createClass({
 
     render: function(){
 
-        var allRows = this.props.rows;
+        var data = this.props.data;
 
         var rows = [];
 
-        for (var rowIndex in allRows) {
+        for (var rowIndex in data) {
             rows.push(<TableRowColumn
                 customCells={this.props.customCells}
                 columnsOrder={this.props.columnsOrder}
                 columns={this.props.columns}
-                row={allRows[rowIndex]} />);
+                data={data[rowIndex]} />);
         }
 
         return(
